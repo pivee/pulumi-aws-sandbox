@@ -5,7 +5,7 @@ import { join } from "path";
 
 export function deployDockerToFargate() {
     const cluster = new aws.ecs.Cluster("cluster", {});
-    
+
     const lb = new awsx.lb.ApplicationLoadBalancer("lb", {
         defaultTargetGroup: {
             port: 3000, // Port exposed in the Dockerfile
@@ -13,7 +13,7 @@ export function deployDockerToFargate() {
     });
 
     const repository = new awsx.ecr.Repository("repository", {});
-    
+
     const image = new awsx.ecr.Image("image", {
         repositoryUrl: repository.url,
         path: join(__dirname, "/../src"),
@@ -31,6 +31,12 @@ export function deployDockerToFargate() {
                 portMappings: [{
                     targetGroup: lb.defaultTargetGroup,
                 }],
+                environment: [
+                    {
+                        name: "ENV_SECRET",
+                        value: "testable_secret"
+                    }
+                ]
             },
         },
         desiredCount: 2
