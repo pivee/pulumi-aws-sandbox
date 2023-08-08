@@ -3,10 +3,12 @@ import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
 import { join } from "path";
 import { exportEnv } from "../../utils";
+import { existsSync } from "fs";
 
 export const dockerApps = {
     javascript: "js",
-    typescript: "ts"
+    typescript: "ts",
+    nextjs: "next"
 } as const;
 
 type DockerApp = (typeof dockerApps)[keyof typeof dockerApps]
@@ -29,19 +31,28 @@ export function deployDockerToFargate(app: DockerApp) {
         path: join(__dirname, `/../../apps/${app}`),
     });
 
+    const envFile = join(__dirname, `/../../apps/${app}/.env.prod`)
+    let environment: { name: string, value: string }[] = [];
+    
+    try {
+        if (existsSync(envFile)) environment = exportEnv(envFile)
+    } catch (error) {
+        console.warn(error);
+    }
+
     const service = new awsx.ecs.FargateService("service", {
         cluster: cluster.arn,
         assignPublicIp: true,
         taskDefinitionArgs: {
             container: {
                 image: image.imageUri,
-                cpu: 128,
-                memory: 50,
+                cpu: 1,
+                memory: 512,
                 essential: true,
                 portMappings: [{
                     targetGroup: lb.defaultTargetGroup,
                 }],
-                environment: exportEnv(join(__dirname, `/../../apps/${app}/.env.prod`))
+                environment: environment
             },
         },
         desiredCount: 2
