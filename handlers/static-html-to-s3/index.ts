@@ -1,5 +1,6 @@
 import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
+import { join } from "path";
 
 export function deployStaticHtmlToS3() {
     // Create an AWS resource (S3 Bucket)
@@ -29,7 +30,7 @@ export function deployStaticHtmlToS3() {
     // Create an AWS resource (S3 Bucket Object)
     const bucketObject = new aws.s3.BucketObject("index.html", {
         bucket: bucket.id,
-        source: new pulumi.asset.FileAsset("./app/index.html"),
+        source: new pulumi.asset.FileAsset(join(__dirname, "/../../app/index.html")),
         contentType: "text/html; charset=utf-8",
         acl: "public-read",
     }, {

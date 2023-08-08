@@ -17,7 +17,7 @@ export function deployDockerToFargate() {
 
     const image = new awsx.ecr.Image("image", {
         repositoryUrl: repository.url,
-        path: join(__dirname, "/../app"),
+        path: join(__dirname, "/../../app"),
     });
 
     const service = new awsx.ecs.FargateService("service", {
@@ -32,7 +32,7 @@ export function deployDockerToFargate() {
                 portMappings: [{
                     targetGroup: lb.defaultTargetGroup,
                 }],
-                environment: exportEnv(join(__dirname, "/../app/.env.prod"))
+                environment: exportEnv(join(__dirname, "/../../app/.env.prod"))
             },
         },
         desiredCount: 2
