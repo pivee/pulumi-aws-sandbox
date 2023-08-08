@@ -29,7 +29,7 @@ export function deployStaticHtmlToS3() {
     // Create an AWS resource (S3 Bucket Object)
     const bucketObject = new aws.s3.BucketObject("index.html", {
         bucket: bucket.id,
-        source: new pulumi.asset.FileAsset("./src/index.html"),
+        source: new pulumi.asset.FileAsset("./app/index.html"),
         contentType: "text/html; charset=utf-8",
         acl: "public-read",
     }, {
@@ -37,10 +37,10 @@ export function deployStaticHtmlToS3() {
     });
 
     // Export the website URL
-    const bucketEndpoint = pulumi.interpolate`http://${bucket.websiteEndpoint}`;
+    const bucketUrl = pulumi.interpolate`http://${bucket.websiteEndpoint}`;
 
     return {
         bucketName,
-        bucketEndpoint,
+        bucketUrl,
     }
 }
