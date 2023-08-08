@@ -13,7 +13,9 @@ export function deployDockerToFargate() {
         }
     });
 
-    const repository = new awsx.ecr.Repository("repository", {});
+    const repository = new awsx.ecr.Repository("repository", {
+        forceDelete: true
+    });
 
     const image = new awsx.ecr.Image("image", {
         repositoryUrl: repository.url,
