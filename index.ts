@@ -10,4 +10,4 @@ export const { bucketName, bucketUrl } = deployStaticHtmlToS3();
 /**
  * Deploy Docker to Fargate
  */
-export const { loadBalancerUrl } = deployDockerToFargate("ts");
+export const { loadBalancerUrl } = deployDockerToFargate("next");
