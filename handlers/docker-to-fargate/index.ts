@@ -4,7 +4,14 @@ import * as pulumi from "@pulumi/pulumi";
 import { join } from "path";
 import { exportEnv } from "../../utils";
 
-export function deployDockerToFargate() {
+export const dockerApps = {
+    javascript: "js",
+    typescript: "ts"
+} as const;
+
+type DockerApp = (typeof dockerApps)[keyof typeof dockerApps]
+
+export function deployDockerToFargate(app: DockerApp) {
     const cluster = new aws.ecs.Cluster("cluster", {});
 
     const lb = new awsx.lb.ApplicationLoadBalancer("lb", {
@@ -19,7 +26,7 @@ export function deployDockerToFargate() {
 
     const image = new awsx.ecr.Image("image", {
         repositoryUrl: repository.url,
-        path: join(__dirname, "/../../app"),
+        path: join(__dirname, `/../../apps/${app}`),
     });
 
     const service = new awsx.ecs.FargateService("service", {
@@ -34,7 +41,7 @@ export function deployDockerToFargate() {
                 portMappings: [{
                     targetGroup: lb.defaultTargetGroup,
                 }],
-                environment: exportEnv(join(__dirname, "/../../app/.env.prod"))
+                environment: exportEnv(join(__dirname, `/../../apps/${app}/.env.prod`))
             },
         },
         desiredCount: 2
