@@ -1,5 +1,6 @@
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
+import * as pulumi from "@pulumi/pulumi";
 
 export function deployDockerToFargate() {
     const cluster = new aws.ecs.Cluster("cluster", {});
@@ -34,7 +35,7 @@ export function deployDockerToFargate() {
         desiredCount: 2
     });
 
-    const loadBalancerUrl = lb.loadBalancer.dnsName;
+    const loadBalancerUrl = pulumi.interpolate`http://${lb.loadBalancer.dnsName}`;
 
     return { loadBalancerUrl };
 }
