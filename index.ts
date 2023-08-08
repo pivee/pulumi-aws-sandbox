@@ -8,6 +8,6 @@ import { deployDockerToFargate } from './handlers/docker-to-fargate'
 
 
 /**
- * Deploy to Fargate
+ * Deploy Docker to Fargate
  */
-// export const { loadBalancerUrl } = deployDockerToFargate();
+export const { loadBalancerUrl } = deployDockerToFargate();
