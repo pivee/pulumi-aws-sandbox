@@ -1,6 +1,10 @@
 {
     "name": "pulumi-sandbox",
     "main": "index.ts",
+    "scripts": {
+        "build": "pulumi up",
+        "destroy": "pulumi destroy"
+    },
     "devDependencies": {
         "@types/node": "^16",
         "dotenv": "^16.3.1",
