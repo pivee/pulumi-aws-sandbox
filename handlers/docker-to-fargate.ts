@@ -2,6 +2,7 @@ import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
 import { join } from "path";
+import { exportEnv } from "../utils";
 
 export function deployDockerToFargate() {
     const cluster = new aws.ecs.Cluster("cluster", {});
@@ -31,12 +32,7 @@ export function deployDockerToFargate() {
                 portMappings: [{
                     targetGroup: lb.defaultTargetGroup,
                 }],
-                environment: [
-                    {
-                        name: "ENV_SECRET",
-                        value: "testable_secret"
-                    }
-                ]
+                environment: exportEnv(join(__dirname, "/../src/.env.prod"))
             },
         },
         desiredCount: 2
