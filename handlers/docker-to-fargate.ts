@@ -4,7 +4,11 @@ import * as awsx from "@pulumi/awsx";
 export function deployDockerToFargate() {
     const cluster = new aws.ecs.Cluster("cluster", {});
     
-    const lb = new awsx.lb.ApplicationLoadBalancer("lb", {});
+    const lb = new awsx.lb.ApplicationLoadBalancer("lb", {
+        defaultTargetGroup: {
+            port: 3000, // Port exposed in the Dockerfile
+        }
+    });
 
     const repository = new awsx.ecr.Repository("repository", {});
     
