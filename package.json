@@ -1,5 +1,5 @@
 {
-    "name": "pulumi-sandbox",
+    "name": "pulumi-aws-sandbox",
     "main": "index.ts",
     "scripts": {
         "build": "pulumi up",
