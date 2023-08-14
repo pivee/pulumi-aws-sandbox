@@ -7,14 +7,17 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy to Amazon ECS
+name: Deploy NextJS to Amazon ECS
 
 on:
   push:
     branches:
       - main
+    paths:
+      - apps/next/**
 
 env:
+  APP_PATH: ./apps/next
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: repository-861579c           # set this to your Amazon ECR repository name
   ECS_SERVICE: service-a44dd02                 # set this to your Amazon ECS service name
@@ -54,7 +57,7 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./apps/next
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $APP_PATH
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
