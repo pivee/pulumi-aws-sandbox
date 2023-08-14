@@ -3,7 +3,7 @@ name: Update ECS Fargate Service
 on:
   push:
     branches:
-      - main  # Adjust the branch name as needed
+      - main
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14  # Adjust the Node.js version as needed
+          node-version: 18
       
       - name: Install dependencies
         run: npm install
@@ -24,16 +24,16 @@ jobs:
       - name: Build and push Docker image
         run: |
           # Build your Docker image and tag it appropriately
-          docker build -t your-ecr-repo:latest .
+          docker build -t 044101166930.dkr.ecr.us-east-1.amazonaws.com/repository-861579c:latest ./apps/next
           # Configure AWS CLI with the provided secrets
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # Authenticate Docker with ECR
-          aws ecr get-login-password --region your-aws-region | docker login --username AWS --password-stdin your-ecr-repo-url
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 044101166930.dkr.ecr.us-east-1.amazonaws.com/repository-861579c-url
           # Push the image to ECR
-          docker push your-ecr-repo:latest
+          docker push 044101166930.dkr.ecr.us-east-1.amazonaws.com/repository-861579c:latest
       
       - name: Update ECS service
         run: |
           # Use AWS CLI to update the ECS service with the latest image
-          aws ecs update-service --cluster your-cluster-name --service your-service-name --force-new-deployment
+          aws ecs update-service --cluster cluster-898f574 --service service-a44dd02 --force-new-deployment
