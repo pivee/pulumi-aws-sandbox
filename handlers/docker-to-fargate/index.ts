@@ -26,6 +26,8 @@ export function deployDockerToFargate(app: DockerApp) {
         forceDelete: true
     });
 
+    const ecrUrl = repository.url;
+
     const image = new awsx.ecr.Image("image", {
         repositoryUrl: repository.url,
         path: join(__dirname, `/../../apps/${app}`),
@@ -60,5 +62,5 @@ export function deployDockerToFargate(app: DockerApp) {
 
     const loadBalancerUrl = pulumi.interpolate`http://${lb.loadBalancer.dnsName}`;
 
-    return { loadBalancerUrl };
+    return { ecrUrl, loadBalancerUrl };
 }
