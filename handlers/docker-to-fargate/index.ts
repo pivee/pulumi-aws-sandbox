@@ -14,15 +14,19 @@ export const dockerApps = {
 type DockerApp = (typeof dockerApps)[keyof typeof dockerApps]
 
 export function deployDockerToFargate(app: DockerApp) {
-    const cluster = new aws.ecs.Cluster("cluster", {});
+    const cluster = new aws.ecs.Cluster("cluster", {
+        name: 'nextjs-cluster',
+    });
 
     const lb = new awsx.lb.ApplicationLoadBalancer("lb", {
         defaultTargetGroup: {
             port: 3000, // Port exposed in the Dockerfile
-        }
+        },
+        name: "pulumi-aws-sandbox-nextjs"
     });
 
     const repository = new awsx.ecr.Repository("repository", {
+        name: 'nextjs-repository',
         forceDelete: true
     });
 
@@ -43,6 +47,7 @@ export function deployDockerToFargate(app: DockerApp) {
     }
 
     const service = new awsx.ecs.FargateService("service", {
+        name: 'nextjs-service',
         cluster: cluster.arn,
         assignPublicIp: true,
         taskDefinitionArgs: {

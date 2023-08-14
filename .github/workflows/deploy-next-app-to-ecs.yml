@@ -19,9 +19,9 @@ on:
 env:
   APP_PATH: ./apps/next
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: repository-861579c           # set this to your Amazon ECR repository name
-  ECS_SERVICE: service-a44dd02                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: cluster-898f574                 # set this to your Amazon ECS cluster name
+  ECR_REPOSITORY: nextjs-repository           # set this to your Amazon ECR repository name
+  ECS_SERVICE: nextjs-service                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: nextjs-cluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ./apps/next/.aws/task-definition.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: container           # set this to the name of the container in the
